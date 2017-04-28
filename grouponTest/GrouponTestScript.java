@@ -2,6 +2,7 @@ package grouponTest;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,13 +28,14 @@ public class GrouponTestScript {
 		
 		driver = new FirefoxDriver(capabilities);
 		String url = "https://www.groupon.com/login";
+		driver.manage().window().maximize();
 		driver.get(url);
 	}
 	
 	@AfterClass
 	public static void closeBrowser() throws InterruptedException{	// Destroy Scanner object at the end
 		Thread.sleep(5000);
-		//driver.quit();
+		driver.quit();
 	}
 	
 	/*@Test
@@ -66,32 +68,13 @@ public class GrouponTestScript {
 		WebElement goods = driver.findElement(By.id("sls-aria-3"));
 		goods.click();
 		Thread.sleep(5000);
-		// Electronics tab
+		
+		try{
+			// Item with rating
+			WebElement child = driver.findElements(By.className("rating")).get(0);
+			
+			Thread.sleep(5000);
 
-		/* 1st Way
-		 List<WebElement> eles = driver.findElements(By.xpath("/html/body/div[1]/div[2]/section[2]/section[1]/div[2]/figure[1]/a"));
-		
-		if(eles.isEmpty()){
-			eles = 
-		}*/
-		
-		// 2nd way
-		//driver.findElements(By.xpath("/html/body/div[1]/div[2]/section[2]/section[1]/div[2]/figure[1]/a")).get(0).click();
-		
-		//3rd way
-		/*WebElement childElectronic =  driver.findElements(By.linkText("Electronics")).get(0);
-		WebElement parentElectronic = childElectronic.findElement(By.xpath("..")).findElement(By.xpath(".."));
-		
-		parentElectronic.click();
-		
-		Thread.sleep(15000);*/
-		// Item with rating
-//		driver.findElements(By.xpath("/html/body/div[1]/div[2]/section[2]/div/div/article/div[1]/div[1]/div/div[2]/ul/li[4]")).get(0).click();
-		WebElement child = driver.findElements(By.className("rating")).get(0);
-		
-//		WebElement parent = child.findElement(By.xpath("..")).findElement(By.xpath("..")).findElement(By.xpath("..")).findElement(By.xpath("..")).findElement(By.xpath(".."));
-		Thread.sleep(5000);
-		if(child != null){
 			WebElement parent = child.findElement(By.xpath("..")).findElement(By.xpath("..")).findElement(By.xpath(".."));
 			parent.click();
 			
@@ -115,10 +98,11 @@ public class GrouponTestScript {
 			Thread.sleep(3000);
 			
 			assertEquals(review, recordedReview);
+			
+			Thread.sleep(5000);
+		}catch(Exception e){
+			System.out.println("No Item Present with rating");
 		}
-		
-		
-		Thread.sleep(5000);
 		
 	}
 
